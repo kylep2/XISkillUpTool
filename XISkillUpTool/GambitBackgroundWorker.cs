@@ -23,6 +23,7 @@ namespace XISkillUpTool
             //gambits.Add(new Gambit(TriggerStats.SelfHPP, 70, GambitComparison.LessThanOrEqual, new CommandObject("/ja Curing Waltz II Higeki", PriorityEnum.Healing), "Self HPP LTE 70: Curing Waltz II"));
             gambits.Add(new Gambit(TriggerStats.SelfTP, 100, GambitComparison.GreaterThanOrEqual, new CommandObject(() => {return "//rampage";}, PriorityEnum.Damaging),"Self TP GTE 100: Rampage", Status.Fighting));
             gambits.Add(new Gambit(TriggerStats.EnemyTarget, "Bloodsucker", GambitComparison.NotEqual, new CommandObject(() => { fface.Windower.SendKeyPress(KeyCode.TabKey); return 0; }, PriorityEnum.Last), "Target Bloodsucker", Status.Standing));
+            gambits.Add(new Gambit(TriggerStats.EnemyTarget, "Bloodsucker", GambitComparison.Equal, new CommandObject(() => { if(fface.Target.IsLocked == false){ fface.Windower.SendKeyPress(KeyCode.NP_MultiplyKey);} if(fface.Player.Status != Status.Fighting){ fface.Windower.SendString("//input /a on;input /follow");} return 0;}, PriorityEnum.Last), "Fight Bloodsucker", Status.Standing));
             //gambits.Add(new Gambit(TriggerStats.PetTP, 100, GambitComparison.GreaterThanOrEqual, new CommandObject("//ss", PriorityEnum.Damaging), "PetTP GTE 100: Spiral Spin", true));
             //gambits.Add(new Gambit(TriggerStats.SelfTP, 100, GambitComparison.GreaterThanOrEqual, new CommandObject("Exenterator", PriorityEnum.Damaging), "Self TP GTE 100: Exenterator"));
             //;wait 3;rf;wait 1;presto;wait 1;featherstep
