@@ -7,11 +7,11 @@ namespace XISkillUpTool
 {
     public class CommandObject
     {
-        public readonly string Text;
+        public readonly Func<dynamic> Function;
         public readonly PriorityEnum Priority;
-        public CommandObject(string _cmd, PriorityEnum _priority)
+        public CommandObject(Func<dynamic> _cmd, PriorityEnum _priority)
         {
-            Text = _cmd;
+            Function = _cmd;
             Priority = _priority;
         }
 

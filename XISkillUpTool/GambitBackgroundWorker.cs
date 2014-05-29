@@ -21,7 +21,8 @@ namespace XISkillUpTool
             gambits = new GambitList();
             //! TODO: programmatically instead of manual
             //gambits.Add(new Gambit(TriggerStats.SelfHPP, 70, GambitComparison.LessThanOrEqual, new CommandObject("/ja Curing Waltz II Higeki", PriorityEnum.Healing), "Self HPP LTE 70: Curing Waltz II"));
-            gambits.Add(new Gambit(TriggerStats.SelfTP, 100, GambitComparison.GreaterThanOrEqual, new CommandObject("//rampage", PriorityEnum.Damaging),"Self TP GTE 100: Rampage", true));
+            gambits.Add(new Gambit(TriggerStats.SelfTP, 100, GambitComparison.GreaterThanOrEqual, new CommandObject(() => {return "//rampage";}, PriorityEnum.Damaging),"Self TP GTE 100: Rampage", Status.Fighting));
+            gambits.Add(new Gambit(TriggerStats.EnemyTarget, "Bloodsucker", GambitComparison.NotEqual, new CommandObject(() => { fface.Windower.SendKeyPress(KeyCode.TabKey); return 0; }, PriorityEnum.Last), "Target Bloodsucker", Status.Standing));
             //gambits.Add(new Gambit(TriggerStats.PetTP, 100, GambitComparison.GreaterThanOrEqual, new CommandObject("//ss", PriorityEnum.Damaging), "PetTP GTE 100: Spiral Spin", true));
             //gambits.Add(new Gambit(TriggerStats.SelfTP, 100, GambitComparison.GreaterThanOrEqual, new CommandObject("Exenterator", PriorityEnum.Damaging), "Self TP GTE 100: Exenterator"));
             //;wait 3;rf;wait 1;presto;wait 1;featherstep
@@ -33,7 +34,16 @@ namespace XISkillUpTool
         {
             if (!this.IsBusy)
             {
-                this.RunWorkerAsync();
+                try
+                {
+                    this.RunWorkerAsync();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    throw e;
+                }
+                
             }
         }
 
@@ -52,12 +62,12 @@ namespace XISkillUpTool
             {
                 fface.Windower.SendString("/echo " + g.Name);
                 g.Execute(fface);
-                int counter = 5;
+                /*int counter = 5;
                 while (counter > 0)
                 {
                     System.Threading.Thread.Sleep(1000);
                     counter--;
-                }
+                }*/
                 //g.Execute();
             }
             this.Run();

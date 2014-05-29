@@ -24,7 +24,6 @@ namespace XISkillUpTool
             //form.Updater.RunWorkerAsync();
             form.Gambits.RunWorkerAsync();
             Application.Run(form);
-            form.Text = "I raaaan, I ran so far awaaaaay";
 
         }
     }

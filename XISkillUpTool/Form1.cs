@@ -16,14 +16,14 @@ namespace XISkillUpTool
     {
         public FFACE fface { get; set; }
 
-        public BackgroundWorker Updater;
+        //public BackgroundWorker Updater;
         public GambitBackgroundWorker Gambits;
         
         public Form1()
         {
-            Updater = new BackgroundWorker();
-            Updater.DoWork += Updater_DoWork;
-            Updater.RunWorkerCompleted +=Updater_RunWorkerCompleted;
+            //Updater = new BackgroundWorker();
+            //Updater.DoWork += Updater_DoWork;
+            //Updater.RunWorkerCompleted +=Updater_RunWorkerCompleted;
 
             
 
@@ -48,15 +48,15 @@ namespace XISkillUpTool
 
             this.pbPlayerTP.Maximum = 300;
 
-            RefreshChat();
+            //RefreshChat();
                 
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            UpdatePlayerStats();
+            /*UpdatePlayerStats();
             UpdateTargetStats();
-            RefreshChat();
+            RefreshChat();*/
         }
 
         private void UpdatePlayerStats()
@@ -99,7 +99,7 @@ namespace XISkillUpTool
             
         }
 
-        private void RefreshChat()
+        /*private void RefreshChat()
         {
             while (fface.Chat.IsNewLine == true)
             {
@@ -119,12 +119,12 @@ namespace XISkillUpTool
                     cline2 = fface.Chat.GetNextLine();
                 } while (cline != null && cline2 != null && cline.Index != cline2.Index);
             }
-        }
+        }*/
 
-        private void UpdaterRun()
+        /*private void UpdaterRun()
         {
             Updater.RunWorkerAsync();
-        }
+        }*/
 
         private void Updater_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -133,10 +133,10 @@ namespace XISkillUpTool
 
         private void Updater_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            RefreshChat();
-            UpdatePlayerStats();
-            UpdateTargetStats();
-            UpdaterRun();
+            //RefreshChat();
+            //UpdatePlayerStats();
+            //UpdateTargetStats();
+            //UpdaterRun();
         }
     }
 }

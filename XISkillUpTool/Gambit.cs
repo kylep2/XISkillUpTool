@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using FFACETools;
 using System.Runtime.Remoting;
+using System.Dynamic;
 
 namespace XISkillUpTool
 {
@@ -14,7 +15,7 @@ namespace XISkillUpTool
         public dynamic TriggerValue { get; set; }
         private Func<dynamic, dynamic, bool> Comparison;
         public readonly CommandObject Command;
-        public readonly bool Engaged;
+        public readonly Status Status;
 
         /// <summary>
         /// 
@@ -25,25 +26,26 @@ namespace XISkillUpTool
         /// <param name="_command"></param>
         /// <param name="_cmd"></param>
         /// <param name="_name"></param>
-        public Gambit(StatTypes _stat, dynamic _value, Func<dynamic, dynamic, bool> _comparison, CommandObject _command, string _name, bool _engaged)
+        /// <param name="_status"></param>
+        public Gambit(StatTypes _stat, dynamic _value, Func<dynamic, dynamic, bool> _comparison, CommandObject _command, string _name, Status _status)
         {
             Command = _command;
             Name = _name;
             TriggerStat = _stat;
             TriggerValue = _value;
             Comparison = _comparison;
-            Engaged = _engaged;
+            Status = _status;
         }
 
         public void Execute(FFACE fface)
         {
-            dynamic result = "";
+            dynamic result;
             try
             {
                 result = Command.Function.Invoke();
-                if (((ObjectHandle)result).Unwrap().GetType() == typeof(string))
+                if (result.GetType() == typeof(String))
                 {
-                    fface.Windower.SendString("//" + result);
+                    fface.Windower.SendString("//" + result.ToString());
                 }
             }
             catch (Exception e)
@@ -51,28 +53,15 @@ namespace XISkillUpTool
                 System.Windows.Forms.MessageBox.Show("/echo Failed to execute gambit: " + this.Name);
                 System.Windows.Forms.MessageBox.Show(e.Message);
             }
-            /*
-            var prefix = "";
-            if (Command.Text.StartsWith("/") == false)
-            {
-                prefix = "//";
-            }
-
-            if (Command.Text.StartsWith("//fface") == false)
-            {
-                fface.Windower.SendString(prefix + Command.Text);
-            } else {
-            */
-
-            
         }
 
         public bool Evaluate(FFACEState _ffstate)
         {
             //set currentvalue based on triggerstat and ffstate
-            dynamic CurrentValue = -1;
-            if (_ffstate.Engaged == Engaged)
+            dynamic CurrentValue = null;
+            if (_ffstate.Status == Status)
             {
+                Console.WriteLine("GambitName: {2} --- _ffstate status: {0} - Intended status: {1}", _ffstate.Status.ToString(), Status, Name);
                 if (TriggerStat.HasFlag(StatTypes.Enemy))
                 {
                     if (TriggerStat.HasFlag(StatTypes.HP))
@@ -127,7 +116,15 @@ namespace XISkillUpTool
                 }
             }//add else if here to check for party/alliance members or pets
 
-            return Comparison(CurrentValue, TriggerValue);
+            try
+            {
+                return Comparison(CurrentValue, TriggerValue);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            
         }
 
     }
@@ -207,6 +204,9 @@ namespace XISkillUpTool
                 };
             NotEqual =
                 delegate(dynamic lhs, dynamic rhs) {
+                    if (lhs == null) { 
+                        return false;
+                    }
                     return lhs != rhs;
                 };
         }
@@ -222,7 +222,7 @@ namespace XISkillUpTool
         public readonly int SelfMP;
         public readonly int SelfTP;
         public readonly int PetTP;
-        public readonly bool Engaged;
+        public readonly Status Status;
         public readonly string Target;
 
         public FFACEState(FFACE _fface)
@@ -234,7 +234,7 @@ namespace XISkillUpTool
             SelfMP = _fface.Player.MPCurrent;
             SelfTP = _fface.Player.TPCurrent;
             PetTP = _fface.NPC.TPCurrent(_fface.NPC.PetID(_fface.Player.ID));
-            Engaged = (_fface.Player.Status == FFACETools.Status.Fighting);
+            Status = _fface.Player.Status;
             Target = _fface.Target.Name;
         }
 
