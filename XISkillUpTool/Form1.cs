@@ -46,30 +46,10 @@ namespace XISkillUpTool
             Gambits = new GambitBackgroundWorker(fface);
 
 
-            this.pbPlayerTP.Maximum = 300;
-
             //RefreshChat();
                 
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            /*UpdatePlayerStats();
-            UpdateTargetStats();
-            RefreshChat();*/
-        }
-
-        private void UpdatePlayerStats()
-        {
-            this.pbPlayerHPP.Value = fface.Player.HPPCurrent;
-            this.pbPlayerMPP.Value = fface.Player.MPPCurrent;
-            this.pbPlayerTP.Value = fface.Player.TPCurrent;
-        }
-
-        private void UpdateTargetStats()
-        {
-            this.pbTargetHPP.Value = fface.Target.HPPCurrent;
-        }
 
         private void txtCommand_KeyDown(object sender, KeyEventArgs e)
         {
